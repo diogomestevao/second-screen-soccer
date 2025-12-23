@@ -51,56 +51,70 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
   const mainReaction = Object.entries(reactions).sort((a, b) => b[1] - a[1])[0];
 
   return (
-    <div
-      className="absolute transform -translate-x-1/2 -translate-y-1/2"
-      style={{ left: `${position.x}%`, top: `${position.y}%` }}
-    >
-      {/* Floating reactions */}
-      {floatingReactions.map((r) => (
-        <FloatingReaction
-          key={r.id}
-          emoji={r.emoji}
-          onComplete={() => removeFloating(r.id)}
-        />
-      ))}
-
-      {/* Reaction counter */}
-      {totalReactions > 0 && (
-        <div 
-          className="reaction-counter bg-accent text-accent-foreground"
-          style={{ zIndex: 30 }}
-        >
-          {totalReactions}
-        </div>
-      )}
-
-      {/* Player circle */}
-      <button
-        className={`player-icon ${isCoach ? 'coach' : ''} w-14 h-14 flex flex-col items-center justify-center`}
-        onClick={() => setShowMenu(true)}
-      >
-        <span className="font-display text-lg leading-none">{number}</span>
-        <span className="text-[8px] font-medium uppercase tracking-tight truncate max-w-[50px]">
-          {name.split(' ').pop()}
-        </span>
-      </button>
-
-      {/* Main reaction indicator */}
-      {mainReaction && mainReaction[1] > 0 && (
-        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">
-          {reactionEmojis[mainReaction[0]]}
-        </div>
-      )}
-
-      {/* Radial menu */}
+    <>
+      {/* Blur overlay when menu is open */}
       {showMenu && (
-        <RadialMenu
-          isCoach={isCoach}
-          onReaction={handleReaction}
-          onClose={() => setShowMenu(false)}
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-fade-in"
+          onClick={() => setShowMenu(false)}
         />
       )}
-    </div>
+      
+      <div
+        className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${
+          showMenu ? 'z-50 scale-110' : ''
+        }`}
+        style={{ left: `${position.x}%`, top: `${position.y}%` }}
+      >
+        {/* Floating reactions */}
+        {floatingReactions.map((r) => (
+          <FloatingReaction
+            key={r.id}
+            emoji={r.emoji}
+            onComplete={() => removeFloating(r.id)}
+          />
+        ))}
+
+        {/* Reaction counter */}
+        {totalReactions > 0 && (
+          <div 
+            className="reaction-counter bg-accent text-accent-foreground"
+            style={{ zIndex: 60 }}
+          >
+            {totalReactions}
+          </div>
+        )}
+
+        {/* Player circle */}
+        <button
+          className={`player-icon ${isCoach ? 'coach' : ''} w-14 h-14 flex flex-col items-center justify-center ${
+            showMenu ? 'ring-4 ring-primary/50 shadow-2xl' : ''
+          }`}
+          onClick={() => setShowMenu(true)}
+        >
+          <span className="font-display text-lg leading-none">{number}</span>
+          <span className="text-[8px] font-medium uppercase tracking-tight truncate max-w-[50px]">
+            {name.split(' ').pop()}
+          </span>
+        </button>
+
+        {/* Main reaction indicator */}
+        {mainReaction && mainReaction[1] > 0 && (
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">
+            {reactionEmojis[mainReaction[0]]}
+          </div>
+        )}
+
+        {/* Radial menu */}
+        {showMenu && (
+          <RadialMenu
+            isCoach={isCoach}
+            onReaction={handleReaction}
+            onClose={() => setShowMenu(false)}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
