@@ -1,0 +1,107 @@
+import { useState } from 'react';
+import RadialMenu from './RadialMenu';
+import FloatingReaction from './FloatingReaction';
+
+interface PlayerProps {
+  id: number;
+  name: string;
+  number: number;
+  position: { x: number; y: number };
+  isCoach?: boolean;
+}
+
+interface Reactions {
+  [key: string]: number;
+}
+
+const reactionEmojis: { [key: string]: string } = {
+  cornetar: '👎',
+  aplaudir: '👏',
+  favoritar: '⭐',
+  embora: '🚪',
+  'boa-escalacao': '✅',
+  'pessima-escalacao': '❌',
+  'boa-substituicao': '🔄',
+  'pessima-substituicao': '💢',
+};
+
+const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) => {
+  const [showMenu, setShowMenu] = useState(false);
+  const [reactions, setReactions] = useState<Reactions>({});
+  const [floatingReactions, setFloatingReactions] = useState<{ id: number; emoji: string }[]>([]);
+
+  const handleReaction = (type: string) => {
+    setReactions((prev) => ({
+      ...prev,
+      [type]: (prev[type] || 0) + 1,
+    }));
+
+    const newFloating = {
+      id: Date.now(),
+      emoji: reactionEmojis[type] || '👍',
+    };
+    setFloatingReactions((prev) => [...prev, newFloating]);
+  };
+
+  const removeFloating = (id: number) => {
+    setFloatingReactions((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  const totalReactions = Object.values(reactions).reduce((a, b) => a + b, 0);
+  const mainReaction = Object.entries(reactions).sort((a, b) => b[1] - a[1])[0];
+
+  return (
+    <div
+      className="absolute transform -translate-x-1/2 -translate-y-1/2"
+      style={{ left: `${position.x}%`, top: `${position.y}%` }}
+    >
+      {/* Floating reactions */}
+      {floatingReactions.map((r) => (
+        <FloatingReaction
+          key={r.id}
+          emoji={r.emoji}
+          onComplete={() => removeFloating(r.id)}
+        />
+      ))}
+
+      {/* Reaction counter */}
+      {totalReactions > 0 && (
+        <div 
+          className="reaction-counter bg-accent text-accent-foreground"
+          style={{ zIndex: 30 }}
+        >
+          {totalReactions}
+        </div>
+      )}
+
+      {/* Player circle */}
+      <button
+        className={`player-icon ${isCoach ? 'coach' : ''} w-14 h-14 flex flex-col items-center justify-center`}
+        onClick={() => setShowMenu(true)}
+      >
+        <span className="font-display text-lg leading-none">{number}</span>
+        <span className="text-[8px] font-medium uppercase tracking-tight truncate max-w-[50px]">
+          {name.split(' ').pop()}
+        </span>
+      </button>
+
+      {/* Main reaction indicator */}
+      {mainReaction && mainReaction[1] > 0 && (
+        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">
+          {reactionEmojis[mainReaction[0]]}
+        </div>
+      )}
+
+      {/* Radial menu */}
+      {showMenu && (
+        <RadialMenu
+          isCoach={isCoach}
+          onReaction={handleReaction}
+          onClose={() => setShowMenu(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default Player;
