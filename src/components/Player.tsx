@@ -60,11 +60,26 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
         />
       )}
       
+      {/* Player in original position (placeholder when centered) */}
+      {showMenu && (
+        <div
+          className="absolute transform -translate-x-1/2 -translate-y-1/2 opacity-30"
+          style={{ left: `${position.x}%`, top: `${position.y}%` }}
+        >
+          <div className={`player-icon ${isCoach ? 'coach' : ''} w-14 h-14 flex flex-col items-center justify-center`}>
+            <span className="font-display text-lg leading-none">{number}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Player - centered when being evaluated */}
       <div
-        className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${
-          showMenu ? 'z-50 scale-110' : ''
+        className={`transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out ${
+          showMenu 
+            ? 'fixed z-50 scale-125 left-1/2 top-1/2' 
+            : 'absolute'
         }`}
-        style={{ left: `${position.x}%`, top: `${position.y}%` }}
+        style={showMenu ? {} : { left: `${position.x}%`, top: `${position.y}%` }}
       >
         {/* Floating reactions */}
         {floatingReactions.map((r) => (
@@ -98,8 +113,17 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
           </span>
         </button>
 
+        {/* Player name when centered */}
+        {showMenu && (
+          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+            <span className="text-sm font-semibold text-foreground bg-background/80 px-3 py-1 rounded-full">
+              {name}
+            </span>
+          </div>
+        )}
+
         {/* Main reaction indicator */}
-        {mainReaction && mainReaction[1] > 0 && (
+        {!showMenu && mainReaction && mainReaction[1] > 0 && (
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">
             {reactionEmojis[mainReaction[0]]}
           </div>
