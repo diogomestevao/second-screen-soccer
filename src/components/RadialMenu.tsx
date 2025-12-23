@@ -42,16 +42,16 @@ const RadialMenu = ({ isCoach, playerName, onReaction, onClose }: RadialMenuProp
       />
       
       {/* Menu container */}
-      <div className="absolute top-24 left-1/2 -translate-x-1/2 z-50 w-max">
+      <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 w-max">
         {/* Player name header */}
-        <div className="text-center mb-6">
-          <span className="text-xs uppercase tracking-widest text-muted-foreground/70">Avaliando</span>
-          <h3 className="text-2xl font-display font-bold text-foreground mt-1">{playerName}</h3>
+        <div className="text-center mb-3">
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground/70">Avaliando</span>
+          <h3 className="text-base font-display font-bold text-foreground">{playerName}</h3>
         </div>
 
         {/* Reaction buttons grid */}
         <div 
-          className="grid gap-3"
+          className="grid gap-1.5"
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {buttons.map((btn, index) => {
@@ -62,11 +62,11 @@ const RadialMenu = ({ isCoach, playerName, onReaction, onClose }: RadialMenuProp
                 key={btn.id}
                 className={`
                   ${btn.color} ${btn.textColor} 
-                  flex flex-col items-center justify-center gap-2 
-                  w-24 h-24 
-                  rounded-2xl 
+                  flex flex-col items-center justify-center gap-1 
+                  w-14 h-14 
+                  rounded-xl 
                   transition-all duration-200 
-                  hover:scale-110 hover:shadow-xl
+                  hover:scale-105 hover:shadow-lg
                   animate-scale-in
                 `}
                 style={{
@@ -78,8 +78,8 @@ const RadialMenu = ({ isCoach, playerName, onReaction, onClose }: RadialMenuProp
                   onClose();
                 }}
               >
-                <Icon className="w-8 h-8" strokeWidth={2} />
-                <span className="text-xs font-semibold text-center leading-tight px-1">{btn.label}</span>
+                <Icon className="w-5 h-5" strokeWidth={2} />
+                <span className="text-[9px] font-semibold text-center leading-tight px-0.5">{btn.label}</span>
               </button>
             );
           })}
@@ -87,7 +87,7 @@ const RadialMenu = ({ isCoach, playerName, onReaction, onClose }: RadialMenuProp
 
         {/* Close button */}
         <button
-          className="mt-6 w-full py-3 rounded-2xl bg-secondary/90 text-muted-foreground text-sm font-semibold hover:bg-secondary transition-colors"
+          className="mt-3 w-full py-2 rounded-xl bg-secondary/90 text-muted-foreground text-xs font-semibold hover:bg-secondary transition-colors"
           onClick={onClose}
         >
           Cancelar
