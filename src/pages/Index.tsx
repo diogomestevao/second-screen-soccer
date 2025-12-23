@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Scoreboard from '@/components/Scoreboard';
 import FootballField from '@/components/FootballField';
+import MatchTimeline from '@/components/MatchTimeline';
+import BottomNav from '@/components/BottomNav';
 
 const Index = () => {
   const [matchData] = useState({
@@ -29,17 +31,21 @@ const Index = () => {
         />
       </header>
 
-      {/* Field */}
-      <main className="flex-1 relative min-h-0">
-        <FootballField />
+      {/* Main content - Field and Timeline */}
+      <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        {/* Half Field - Top */}
+        <div className="h-[45%] relative flex-shrink-0">
+          <FootballField />
+        </div>
+        
+        {/* Timeline Feed - Bottom */}
+        <div className="flex-1 min-h-0 bg-secondary/30 border-t border-border/50">
+          <MatchTimeline />
+        </div>
       </main>
 
-      {/* Footer hint */}
-      <footer className="flex-shrink-0 py-3 px-4 text-center bg-secondary/50">
-        <p className="text-xs text-muted-foreground">
-          Toque em um jogador para reagir • Arraste para explorar
-        </p>
-      </footer>
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 };
