@@ -1,25 +1,25 @@
 import Player from './Player';
 
-// Jogadores do Palmeiras - Formação 4-3-3
+// Jogadores do Palmeiras - Formação 4-3-3 (meia cancha)
 const players = [
   // Goleiro
-  { id: 1, name: 'Weverton', number: 21, position: { x: 50, y: 90 } },
+  { id: 1, name: 'Weverton', number: 21, position: { x: 50, y: 92 } },
   
   // Defesa (4)
-  { id: 2, name: 'Marcos Rocha', number: 2, position: { x: 85, y: 75 } },
-  { id: 3, name: 'Gustavo Gómez', number: 15, position: { x: 65, y: 78 } },
-  { id: 4, name: 'Murilo', number: 26, position: { x: 35, y: 78 } },
-  { id: 5, name: 'Piquerez', number: 22, position: { x: 15, y: 75 } },
+  { id: 2, name: 'Marcos Rocha', number: 2, position: { x: 82, y: 80 } },
+  { id: 3, name: 'Gustavo Gómez', number: 15, position: { x: 62, y: 82 } },
+  { id: 4, name: 'Murilo', number: 26, position: { x: 38, y: 82 } },
+  { id: 5, name: 'Piquerez', number: 22, position: { x: 18, y: 80 } },
   
   // Meio-campo (3)
-  { id: 6, name: 'Aníbal Moreno', number: 5, position: { x: 50, y: 58 } },
-  { id: 7, name: 'Zé Rafael', number: 8, position: { x: 75, y: 48 } },
-  { id: 8, name: 'Raphael Veiga', number: 23, position: { x: 25, y: 48 } },
+  { id: 6, name: 'Aníbal Moreno', number: 5, position: { x: 50, y: 68 } },
+  { id: 7, name: 'Zé Rafael', number: 8, position: { x: 72, y: 62 } },
+  { id: 8, name: 'Raphael Veiga', number: 23, position: { x: 28, y: 62 } },
   
   // Ataque (3)
-  { id: 9, name: 'Estêvão', number: 41, position: { x: 82, y: 25 } },
-  { id: 10, name: 'Flaco López', number: 42, position: { x: 50, y: 20 } },
-  { id: 11, name: 'Dudu', number: 7, position: { x: 18, y: 25 } },
+  { id: 9, name: 'Estêvão', number: 41, position: { x: 78, y: 54 } },
+  { id: 10, name: 'Flaco López', number: 42, position: { x: 50, y: 52 } },
+  { id: 11, name: 'Dudu', number: 7, position: { x: 22, y: 54 } },
 ];
 
 const FootballField = () => {
@@ -154,7 +154,7 @@ const FootballField = () => {
         id={0}
         name="Abel Ferreira"
         number={0}
-        position={{ x: 92, y: 50 }}
+        position={{ x: 92, y: 72 }}
         isCoach={true}
       />
     </div>
