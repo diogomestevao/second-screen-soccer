@@ -12,7 +12,7 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen min-h-[100dvh] flex flex-col bg-background">
+    <div className="h-screen h-[100dvh] flex flex-col bg-background overflow-hidden">
       {/* Header */}
       <header className="flex-shrink-0">
         <div className="px-4 py-2 flex items-center justify-center border-b border-border/50">
@@ -30,7 +30,7 @@ const Index = () => {
       </header>
 
       {/* Field */}
-      <main className="flex-1 relative overflow-hidden">
+      <main className="flex-1 relative min-h-0">
         <FootballField />
       </main>
 
