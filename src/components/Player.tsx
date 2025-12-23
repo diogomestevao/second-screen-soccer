@@ -74,7 +74,7 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
 
       {/* Player - centered when being evaluated */}
       <div
-        className={`transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out ${
+        className={`transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ease-out ${
           showMenu 
             ? 'fixed z-50 scale-125 left-1/2 top-1/2' 
             : 'absolute'

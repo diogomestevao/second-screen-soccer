@@ -27,10 +27,10 @@ const RadialMenu = ({ onReaction, onClose }: RadialMenuProps) => {
         onClick={onClose}
       />
       
-      {/* Menu container */}
-      <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 w-max">
-        {/* Reaction buttons grid */}
-        <div className="grid grid-cols-2 gap-1.5">
+      {/* Menu container - positioned around the player icon */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
+        {/* Buttons positioned on left and right of the player */}
+        <div className="flex items-center gap-20">
           {buttons.map((btn, index) => {
             const Icon = btn.icon;
             
@@ -62,9 +62,10 @@ const RadialMenu = ({ onReaction, onClose }: RadialMenuProps) => {
           })}
         </div>
 
-        {/* Close button */}
+        {/* Close button below */}
         <button
-          className="mt-3 w-full py-2 rounded-xl bg-secondary/90 text-muted-foreground text-sm font-bold hover:bg-secondary transition-colors"
+          className="absolute left-1/2 -translate-x-1/2 top-20 px-6 py-2 rounded-xl bg-secondary/90 text-muted-foreground text-sm font-bold hover:bg-secondary transition-colors animate-scale-in"
+          style={{ animationDelay: '80ms', animationFillMode: 'both' }}
           onClick={onClose}
         >
           ✕
