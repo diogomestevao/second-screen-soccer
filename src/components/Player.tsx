@@ -123,8 +123,6 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
         {/* Radial menu */}
         {showMenu && (
           <RadialMenu
-            isCoach={isCoach}
-            playerName={name}
             onReaction={handleReaction}
             onClose={() => setShowMenu(false)}
           />
