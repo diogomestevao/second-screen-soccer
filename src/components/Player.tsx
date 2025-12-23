@@ -113,15 +113,6 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
           </span>
         </button>
 
-        {/* Player name when centered */}
-        {showMenu && (
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
-            <span className="text-sm font-semibold text-foreground bg-background/80 px-3 py-1 rounded-full">
-              {name}
-            </span>
-          </div>
-        )}
-
         {/* Main reaction indicator */}
         {!showMenu && mainReaction && mainReaction[1] > 0 && (
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">
@@ -133,6 +124,7 @@ const Player = ({ id, name, number, position, isCoach = false }: PlayerProps) =>
         {showMenu && (
           <RadialMenu
             isCoach={isCoach}
+            playerName={name}
             onReaction={handleReaction}
             onClose={() => setShowMenu(false)}
           />

@@ -2,35 +2,27 @@ import { ThumbsDown, ThumbsUp, Star, DoorOpen, CheckCircle, XCircle, RefreshCw, 
 
 interface RadialMenuProps {
   isCoach: boolean;
+  playerName: string;
   onReaction: (type: string) => void;
   onClose: () => void;
 }
 
-const RadialMenu = ({ isCoach, onReaction, onClose }: RadialMenuProps) => {
+const RadialMenu = ({ isCoach, playerName, onReaction, onClose }: RadialMenuProps) => {
   const baseButtons = [
-    { id: 'cornetar', icon: ThumbsDown, label: 'Cornetar', color: 'bg-reaction-boo', angle: 0 },
-    { id: 'aplaudir', icon: ThumbsUp, label: 'Aplaudir', color: 'bg-reaction-applaud', angle: 90 },
-    { id: 'favoritar', icon: Star, label: 'Favoritar', color: 'bg-reaction-favorite', angle: 180 },
-    { id: 'embora', icon: DoorOpen, label: 'Mandar Embora', color: 'bg-reaction-leave', angle: 270 },
+    { id: 'cornetar', icon: ThumbsDown, label: 'Cornetar', color: 'bg-reaction-boo', textColor: 'text-white' },
+    { id: 'aplaudir', icon: ThumbsUp, label: 'Aplaudir', color: 'bg-reaction-applaud', textColor: 'text-white' },
+    { id: 'favoritar', icon: Star, label: 'Favoritar', color: 'bg-reaction-favorite', textColor: 'text-black' },
+    { id: 'embora', icon: DoorOpen, label: 'Mandar Embora', color: 'bg-reaction-leave', textColor: 'text-white' },
   ];
 
   const coachButtons = [
-    { id: 'boa-escalacao', icon: CheckCircle, label: 'Boa Escalação', color: 'bg-reaction-good', angle: 45 },
-    { id: 'pessima-escalacao', icon: XCircle, label: 'Péssima Escalação', color: 'bg-reaction-bad', angle: 135 },
-    { id: 'boa-substituicao', icon: RefreshCw, label: 'Boa Substituição', color: 'bg-reaction-good', angle: 225 },
-    { id: 'pessima-substituicao', icon: AlertCircle, label: 'Péssima Substituição', color: 'bg-reaction-bad', angle: 315 },
+    { id: 'boa-escalacao', icon: CheckCircle, label: 'Boa Escalação', color: 'bg-reaction-good', textColor: 'text-white' },
+    { id: 'pessima-escalacao', icon: XCircle, label: 'Péssima Escalação', color: 'bg-reaction-bad', textColor: 'text-white' },
+    { id: 'boa-substituicao', icon: RefreshCw, label: 'Boa Substituição', color: 'bg-reaction-good', textColor: 'text-white' },
+    { id: 'pessima-substituicao', icon: AlertCircle, label: 'Péssima Substituição', color: 'bg-reaction-bad', textColor: 'text-white' },
   ];
 
   const buttons = isCoach ? [...baseButtons, ...coachButtons] : baseButtons;
-  const radius = isCoach ? 85 : 70;
-
-  const getPosition = (angle: number, r: number) => {
-    const radian = (angle - 90) * (Math.PI / 180);
-    return {
-      x: Math.cos(radian) * r,
-      y: Math.sin(radian) * r,
-    };
-  };
 
   return (
     <div className="radial-menu" onClick={(e) => e.stopPropagation()}>
@@ -40,39 +32,44 @@ const RadialMenu = ({ isCoach, onReaction, onClose }: RadialMenuProps) => {
         onClick={onClose}
       />
       
-      {/* Menu center */}
-      <div className="relative z-50">
-        {buttons.map((btn, index) => {
-          const pos = getPosition(btn.angle, radius);
-          const Icon = btn.icon;
-          
-          return (
-            <button
-              key={btn.id}
-              className={`radial-button ${btn.color} w-12 h-12`}
-              style={{
-                left: `${pos.x}px`,
-                top: `${pos.y}px`,
-                transform: 'translate(-50%, -50%)',
-                animationDelay: `${index * 50}ms`,
-              }}
-              onClick={() => {
-                onReaction(btn.id);
-                onClose();
-              }}
-              title={btn.label}
-            >
-              <Icon className="w-5 h-5 text-foreground" />
-            </button>
-          );
-        })}
-        
-        {/* Close button at center */}
+      {/* Menu container - grid layout below player */}
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50">
+        {/* Player name header */}
+        <div className="text-center mb-4">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">Avaliando</span>
+          <h3 className="text-xl font-display text-foreground">{playerName}</h3>
+        </div>
+
+        {/* Reaction buttons grid */}
+        <div className={`grid gap-2 ${isCoach ? 'grid-cols-2' : 'grid-cols-2'}`}>
+          {buttons.map((btn, index) => {
+            const Icon = btn.icon;
+            
+            return (
+              <button
+                key={btn.id}
+                className={`${btn.color} ${btn.textColor} flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-lg min-w-[140px]`}
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                }}
+                onClick={() => {
+                  onReaction(btn.id);
+                  onClose();
+                }}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm font-medium whitespace-nowrap">{btn.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Close button */}
         <button
-          className="absolute w-10 h-10 rounded-full bg-secondary flex items-center justify-center -translate-x-1/2 -translate-y-1/2 z-50"
+          className="mt-4 w-full py-2 rounded-xl bg-secondary/80 text-muted-foreground text-sm font-medium hover:bg-secondary transition-colors"
           onClick={onClose}
         >
-          <span className="text-lg font-bold">×</span>
+          Cancelar
         </button>
       </div>
     </div>
