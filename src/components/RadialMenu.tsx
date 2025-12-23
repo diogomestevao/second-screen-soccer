@@ -27,10 +27,10 @@ const RadialMenu = ({ onReaction, onClose }: RadialMenuProps) => {
         onClick={onClose}
       />
       
-      {/* Menu container - positioned around the player icon */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
-        {/* Buttons positioned on left and right of the player */}
-        <div className="flex items-center gap-20">
+      {/* Menu container - positioned below the player icon */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 z-50 mt-10">
+        {/* Buttons side by side below the player */}
+        <div className="flex items-center gap-3">
           {buttons.map((btn, index) => {
             const Icon = btn.icon;
             
