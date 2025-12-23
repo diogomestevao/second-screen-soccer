@@ -4,8 +4,8 @@ import FootballField from '@/components/FootballField';
 
 const Index = () => {
   const [matchData] = useState({
-    teamA: 'Flamengo',
-    teamB: 'Palmeiras',
+    teamA: 'Palmeiras',
+    teamB: 'Flamengo',
     scoreA: 2,
     scoreB: 1,
     matchTime: 67,
