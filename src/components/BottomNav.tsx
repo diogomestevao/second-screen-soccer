@@ -1,4 +1,5 @@
-import { Home, User } from 'lucide-react';
+import { Home, User, Radio } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -24,16 +25,28 @@ const NavItem = ({ icon, label, isActive = false, onClick }: NavItemProps) => (
 );
 
 const BottomNav = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <nav className="flex items-center justify-center gap-8 py-2 px-4 bg-background border-t border-border/50">
       <NavItem
         icon={<Home className="w-5 h-5" />}
         label="Home"
-        isActive={true}
+        isActive={location.pathname === '/'}
+        onClick={() => navigate('/')}
+      />
+      <NavItem
+        icon={<Radio className="w-5 h-5" />}
+        label="Live"
+        isActive={location.pathname === '/live'}
+        onClick={() => navigate('/live')}
       />
       <NavItem
         icon={<User className="w-5 h-5" />}
         label="Perfil"
+        isActive={location.pathname === '/perfil'}
+        onClick={() => navigate('/perfil')}
       />
     </nav>
   );
