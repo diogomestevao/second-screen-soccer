@@ -1,18 +1,6 @@
-import { useState } from 'react';
-import Scoreboard from '@/components/Scoreboard';
-import FootballField from '@/components/FootballField';
-import MatchTimeline from '@/components/MatchTimeline';
 import BottomNav from '@/components/BottomNav';
 
 const Index = () => {
-  const [matchData] = useState({
-    teamA: 'Palmeiras',
-    teamB: 'Flamengo',
-    scoreA: 2,
-    scoreB: 1,
-    matchTime: 67,
-  });
-
   return (
     <div className="h-screen h-[100dvh] flex flex-col bg-background overflow-hidden">
       {/* Header */}
@@ -22,26 +10,14 @@ const Index = () => {
             2S<span className="text-accent">FUT</span>
           </h1>
         </div>
-        <Scoreboard
-          teamA={matchData.teamA}
-          teamB={matchData.teamB}
-          scoreA={matchData.scoreA}
-          scoreB={matchData.scoreB}
-          matchTime={matchData.matchTime}
-        />
       </header>
 
-      {/* Main content - Field and Timeline */}
-      <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
-        {/* Half Field - Top */}
-        <div className="h-[45%] relative flex-shrink-0">
-          <FootballField />
-        </div>
-        
-        {/* Timeline Feed - Bottom */}
-        <div className="flex-1 min-h-0 bg-secondary/30 border-t border-border/50">
-          <MatchTimeline />
-        </div>
+      {/* Main content */}
+      <main className="flex-1 flex flex-col items-center justify-center min-h-0 overflow-hidden px-4">
+        <h2 className="text-xl font-semibold text-foreground mb-2">Bem-vindo ao 2SFUT</h2>
+        <p className="text-muted-foreground text-center">
+          Acompanhe partidas ao vivo no menu Live
+        </p>
       </main>
 
       {/* Bottom Navigation */}
