@@ -56,8 +56,8 @@ serve(async (req) => {
     // Create Supabase client with service role for write access
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Fetch next 3 fixtures for Palmeiras (team 121)
-    const url = `${API_BASE_URL}/fixtures?team=121&season=2025&next=3&timezone=America/Sao_Paulo`;
+    // Fetch next 3 fixtures for Palmeiras (team 121) - season 2025
+    const url = `${API_BASE_URL}/fixtures?team=121&next=3&timezone=America/Sao_Paulo`;
     
     console.log(`Fetching fixtures from: ${url}`);
 
