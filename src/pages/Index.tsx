@@ -1,9 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '@/components/BottomNav';
-import MatchCard from '@/components/MatchCard';
-import { footballApi, Fixture } from '@/services/footballApi';
+import FixtureCard from '@/components/FixtureCard';
+import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
+
+interface Fixture {
+  id: number;
+  date_time: string;
+  status_short: string;
+  home_team_id: number;
+  home_team_name: string;
+  home_team_logo: string;
+  away_team_id: number;
+  away_team_name: string;
+  away_team_logo: string;
+  league_id: number;
+  round: string | null;
+  home_score: number | null;
+  away_score: number | null;
+}
 
 const Index = () => {
   const navigate = useNavigate();
@@ -15,9 +31,15 @@ const Index = () => {
     const fetchFixtures = async () => {
       try {
         setLoading(true);
-        // Buscar últimas 3 partidas do Palmeiras (team id: 121)
-        const response = await footballApi.getLastFixtures(121, 3);
-        setFixtures(response.response);
+        const { data, error: dbError } = await supabase
+          .from('fixtures')
+          .select('*')
+          .order('date_time', { ascending: true })
+          .limit(5);
+
+        if (dbError) throw dbError;
+        
+        setFixtures(data || []);
         setError(null);
       } catch (err) {
         console.error('Error fetching fixtures:', err);
@@ -47,7 +69,7 @@ const Index = () => {
 
       {/* Main content */}
       <main className="flex-1 min-h-0 overflow-y-auto px-4 py-4">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Últimas Partidas</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Próximas Partidas</h2>
         
         {loading && (
           <div className="flex items-center justify-center py-12">
@@ -69,14 +91,20 @@ const Index = () => {
 
         {!loading && !error && fixtures.length > 0 && (
           <div className="flex flex-col gap-3">
-            {fixtures.map((match) => (
-              <MatchCard
-                key={match.fixture.id}
-                fixture={match.fixture}
-                league={match.league}
-                teams={match.teams}
-                goals={match.goals}
-                onClick={() => handleMatchClick(match.fixture.id)}
+            {fixtures.map((fixture) => (
+              <FixtureCard
+                key={fixture.id}
+                id={fixture.id}
+                dateTime={fixture.date_time}
+                statusShort={fixture.status_short}
+                homeTeamName={fixture.home_team_name}
+                homeTeamLogo={fixture.home_team_logo}
+                awayTeamName={fixture.away_team_name}
+                awayTeamLogo={fixture.away_team_logo}
+                homeScore={fixture.home_score}
+                awayScore={fixture.away_score}
+                round={fixture.round}
+                onClick={() => handleMatchClick(fixture.id)}
               />
             ))}
           </div>
