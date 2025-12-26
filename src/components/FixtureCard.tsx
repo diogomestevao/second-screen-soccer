@@ -21,7 +21,7 @@ interface FixtureCardProps {
   round: string | null;
   prediction?: Prediction | null;
   isAuthenticated?: boolean;
-  onClick?: () => void;
+  
   onPredictClick?: () => void;
 }
 
@@ -37,7 +37,7 @@ const FixtureCard = ({
   round,
   prediction,
   isAuthenticated = false,
-  onClick,
+  
   onPredictClick,
 }: FixtureCardProps) => {
   const matchDate = new Date(dateTime);
@@ -55,10 +55,7 @@ const FixtureCard = ({
   };
 
   return (
-    <div 
-      className="bg-card border border-border/50 rounded-xl p-4 cursor-pointer hover:bg-accent/10 transition-colors"
-      onClick={onClick}
-    >
+    <div className="bg-card border border-border/50 rounded-xl p-4">
       {/* Round */}
       {round && (
         <div className="flex items-center gap-2 mb-3">

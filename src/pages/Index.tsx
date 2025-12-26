@@ -98,10 +98,6 @@ const Index = () => {
     fetchPredictions();
   }, [user, fixtures]);
 
-  const handleMatchClick = (fixtureId: number) => {
-    navigate(`/live?fixture=${fixtureId}`);
-  };
-
   const handlePredictClick = (fixture: Fixture) => {
     if (!user) {
       toast({
@@ -196,7 +192,6 @@ const Index = () => {
                 round={fixture.round}
                 prediction={predictions.get(fixture.id)}
                 isAuthenticated={!!user}
-                onClick={() => handleMatchClick(fixture.id)}
                 onPredictClick={() => handlePredictClick(fixture)}
               />
             ))}
