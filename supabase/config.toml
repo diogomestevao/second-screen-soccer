@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.save-prediction]
 verify_jwt = false
+
+[functions.update-live-fixtures]
+verify_jwt = false
