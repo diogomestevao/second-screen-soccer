@@ -29,8 +29,8 @@ const PredictionModal = ({
   existingAwayScore,
   onSave,
 }: PredictionModalProps) => {
-  const [homeScore, setHomeScore] = useState<string>(existingHomeScore?.toString() ?? '');
-  const [awayScore, setAwayScore] = useState<string>(existingAwayScore?.toString() ?? '');
+  const [homeScore, setHomeScore] = useState<string>(existingHomeScore?.toString() ?? '0');
+  const [awayScore, setAwayScore] = useState<string>(existingAwayScore?.toString() ?? '0');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
