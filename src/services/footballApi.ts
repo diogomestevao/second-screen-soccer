@@ -177,4 +177,30 @@ export const footballApi = {
     const today = new Date().toISOString().split('T')[0];
     return callFootballApi<Fixture[]>('/fixtures', { date: today });
   },
+
+  // Get fixtures by team
+  getFixturesByTeam: (teamId: number, season: number, status?: string) => {
+    const params: Record<string, string> = {
+      team: teamId.toString(),
+      season: season.toString(),
+    };
+    if (status) {
+      params.status = status;
+    }
+    return callFootballApi<Fixture[]>('/fixtures', params);
+  },
+
+  // Get next fixtures for a team
+  getNextFixtures: (teamId: number, next: number = 3) => 
+    callFootballApi<Fixture[]>('/fixtures', { 
+      team: teamId.toString(), 
+      next: next.toString() 
+    }),
+
+  // Get last fixtures for a team
+  getLastFixtures: (teamId: number, last: number = 3) => 
+    callFootballApi<Fixture[]>('/fixtures', { 
+      team: teamId.toString(), 
+      last: last.toString() 
+    }),
 };
