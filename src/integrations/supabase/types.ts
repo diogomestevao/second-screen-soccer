@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      fixtures: {
+        Row: {
+          away_score: number | null
+          away_team_id: number
+          away_team_logo: string
+          away_team_name: string
+          created_at: string | null
+          date_time: string
+          home_score: number | null
+          home_team_id: number
+          home_team_logo: string
+          home_team_name: string
+          id: number
+          league_id: number
+          processed: boolean | null
+          round: string | null
+          status_short: string
+          updated_at: string | null
+        }
+        Insert: {
+          away_score?: number | null
+          away_team_id: number
+          away_team_logo: string
+          away_team_name: string
+          created_at?: string | null
+          date_time: string
+          home_score?: number | null
+          home_team_id: number
+          home_team_logo: string
+          home_team_name: string
+          id: number
+          league_id: number
+          processed?: boolean | null
+          round?: string | null
+          status_short: string
+          updated_at?: string | null
+        }
+        Update: {
+          away_score?: number | null
+          away_team_id?: number
+          away_team_logo?: string
+          away_team_name?: string
+          created_at?: string | null
+          date_time?: string
+          home_score?: number | null
+          home_team_id?: number
+          home_team_logo?: string
+          home_team_name?: string
+          id?: number
+          league_id?: number
+          processed?: boolean | null
+          round?: string | null
+          status_short?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string
