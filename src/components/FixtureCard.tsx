@@ -1,6 +1,12 @@
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Calendar } from 'lucide-react';
+import { Calendar, Target } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+interface Prediction {
+  home_score: number;
+  away_score: number;
+}
 
 interface FixtureCardProps {
   id: number;
@@ -13,7 +19,10 @@ interface FixtureCardProps {
   homeScore: number | null;
   awayScore: number | null;
   round: string | null;
+  prediction?: Prediction | null;
+  isAuthenticated?: boolean;
   onClick?: () => void;
+  onPredictClick?: () => void;
 }
 
 const FixtureCard = ({
@@ -26,7 +35,10 @@ const FixtureCard = ({
   homeScore,
   awayScore,
   round,
+  prediction,
+  isAuthenticated = false,
   onClick,
+  onPredictClick,
 }: FixtureCardProps) => {
   const matchDate = new Date(dateTime);
   const formattedDate = format(matchDate, "dd MMM", { locale: ptBR });
@@ -35,6 +47,12 @@ const FixtureCard = ({
   const isLive = ['1H', '2H', 'HT', 'ET', 'P', 'LIVE'].includes(statusShort);
   const isFinished = statusShort === 'FT';
   const isScheduled = statusShort === 'NS' || statusShort === 'TBD';
+  const canPredict = statusShort === 'NS';
+
+  const handlePredictClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onPredictClick?.();
+  };
 
   return (
     <div 
@@ -90,12 +108,38 @@ const FixtureCard = ({
         </div>
       </div>
 
-      {/* Match Info */}
-      <div className="flex items-center justify-center mt-3 pt-3 border-t border-border/30">
+      {/* Match Info & Prediction */}
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
         <div className="flex items-center gap-1 text-muted-foreground">
           <Calendar className="w-3 h-3" />
           <span className="text-[10px]">{formattedDate}</span>
         </div>
+
+        {/* Prediction Section */}
+        {isAuthenticated && (
+          <div className="flex items-center gap-2">
+            {prediction ? (
+              <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-md">
+                <Target className="w-3 h-3 text-primary" />
+                <span className="text-xs font-medium text-primary">
+                  {prediction.home_score} x {prediction.away_score}
+                </span>
+              </div>
+            ) : canPredict ? (
+              <Button
+                size="sm"
+                variant="default"
+                className="h-7 text-xs px-3"
+                onClick={handlePredictClick}
+              >
+                <Target className="w-3 h-3 mr-1" />
+                Palpitar
+              </Button>
+            ) : (
+              <span className="text-[10px] text-muted-foreground">Fechado</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
