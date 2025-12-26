@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '@/components/BottomNav';
 import FixtureCard from '@/components/FixtureCard';
+import PredictionModal from '@/components/PredictionModal';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
 interface Fixture {
@@ -21,11 +24,22 @@ interface Fixture {
   away_score: number | null;
 }
 
+interface Prediction {
+  fixture_id: number;
+  home_score: number;
+  away_score: number;
+}
+
 const Index = () => {
   const navigate = useNavigate();
+  const { user, session } = useAuth();
+  const { toast } = useToast();
   const [fixtures, setFixtures] = useState<Fixture[]>([]);
+  const [predictions, setPredictions] = useState<Map<number, Prediction>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFixture, setSelectedFixture] = useState<Fixture | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchFixtures = async () => {
@@ -52,8 +66,84 @@ const Index = () => {
     fetchFixtures();
   }, []);
 
+  // Fetch user predictions
+  useEffect(() => {
+    const fetchPredictions = async () => {
+      if (!user || fixtures.length === 0) return;
+
+      try {
+        const fixtureIds = fixtures.map(f => f.id);
+        const { data, error } = await supabase
+          .from('predictions')
+          .select('fixture_id, home_score, away_score')
+          .eq('user_id', user.id)
+          .in('fixture_id', fixtureIds);
+
+        if (error) throw error;
+
+        const predictionsMap = new Map<number, Prediction>();
+        data?.forEach(p => {
+          predictionsMap.set(p.fixture_id, {
+            fixture_id: p.fixture_id,
+            home_score: p.home_score,
+            away_score: p.away_score,
+          });
+        });
+        setPredictions(predictionsMap);
+      } catch (err) {
+        console.error('Error fetching predictions:', err);
+      }
+    };
+
+    fetchPredictions();
+  }, [user, fixtures]);
+
   const handleMatchClick = (fixtureId: number) => {
     navigate(`/live?fixture=${fixtureId}`);
+  };
+
+  const handlePredictClick = (fixture: Fixture) => {
+    if (!user) {
+      toast({
+        title: 'Login necessário',
+        description: 'Faça login para fazer palpites',
+        variant: 'destructive',
+      });
+      navigate('/auth');
+      return;
+    }
+    setSelectedFixture(fixture);
+    setModalOpen(true);
+  };
+
+  const handleSavePrediction = async (fixtureId: number, homeScore: number, awayScore: number) => {
+    if (!session?.access_token) {
+      throw new Error('Sessão expirada');
+    }
+
+    const response = await supabase.functions.invoke('save-prediction', {
+      body: { fixture_id: fixtureId, home_score: homeScore, away_score: awayScore },
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message || 'Erro ao salvar palpite');
+    }
+
+    if (response.data?.error) {
+      throw new Error(response.data.error);
+    }
+
+    // Update local state
+    setPredictions(prev => {
+      const updated = new Map(prev);
+      updated.set(fixtureId, { fixture_id: fixtureId, home_score: homeScore, away_score: awayScore });
+      return updated;
+    });
+
+    toast({
+      title: 'Palpite salvo!',
+      description: `Seu palpite: ${homeScore} x ${awayScore}`,
+    });
   };
 
   return (
@@ -104,12 +194,31 @@ const Index = () => {
                 homeScore={fixture.home_score}
                 awayScore={fixture.away_score}
                 round={fixture.round}
+                prediction={predictions.get(fixture.id)}
+                isAuthenticated={!!user}
                 onClick={() => handleMatchClick(fixture.id)}
+                onPredictClick={() => handlePredictClick(fixture)}
               />
             ))}
           </div>
         )}
       </main>
+
+      {/* Prediction Modal */}
+      {selectedFixture && (
+        <PredictionModal
+          open={modalOpen}
+          onOpenChange={setModalOpen}
+          homeTeamName={selectedFixture.home_team_name}
+          homeTeamLogo={selectedFixture.home_team_logo}
+          awayTeamName={selectedFixture.away_team_name}
+          awayTeamLogo={selectedFixture.away_team_logo}
+          fixtureId={selectedFixture.id}
+          existingHomeScore={predictions.get(selectedFixture.id)?.home_score}
+          existingAwayScore={predictions.get(selectedFixture.id)?.away_score}
+          onSave={handleSavePrediction}
+        />
+      )}
 
       {/* Bottom Navigation */}
       <BottomNav />

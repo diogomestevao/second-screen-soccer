@@ -71,6 +71,51 @@ export type Database = {
         }
         Relationships: []
       }
+      predictions: {
+        Row: {
+          away_score: number
+          created_at: string | null
+          fixture_id: number
+          home_score: number
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          away_score: number
+          created_at?: string | null
+          fixture_id: number
+          home_score: number
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          away_score?: number
+          created_at?: string | null
+          fixture_id?: number
+          home_score?: number
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predictions_fixture_id_fkey"
+            columns: ["fixture_id"]
+            isOneToOne: false
+            referencedRelation: "fixtures"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "predictions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string
@@ -106,7 +151,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_place_prediction: { Args: { p_fixture_id: number }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
