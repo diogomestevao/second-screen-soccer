@@ -1,5 +1,7 @@
 import { Home, User, Radio, Trophy } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -27,6 +29,21 @@ const NavItem = ({ icon, label, isActive = false, onClick }: NavItemProps) => (
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  const handleNavigation = (path: string, isProtected: boolean = false) => {
+    if (isProtected && !user) {
+      toast({
+        title: 'Acesso restrito',
+        description: 'Faça login para acessar esta página',
+        variant: 'destructive',
+      });
+      navigate('/perfil');
+      return;
+    }
+    navigate(path);
+  };
 
   return (
     <nav className="flex items-center justify-center gap-8 py-2 px-4 bg-background border-t border-border/50">
@@ -34,25 +51,25 @@ const BottomNav = () => {
         icon={<Home className="w-5 h-5" />}
         label="Home"
         isActive={location.pathname === '/'}
-        onClick={() => navigate('/')}
+        onClick={() => handleNavigation('/')}
       />
       <NavItem
         icon={<Radio className="w-5 h-5" />}
         label="Live"
         isActive={location.pathname === '/live'}
-        onClick={() => navigate('/live')}
+        onClick={() => handleNavigation('/live', true)}
       />
       <NavItem
         icon={<Trophy className="w-5 h-5" />}
         label="Ranking"
         isActive={location.pathname === '/ranking'}
-        onClick={() => navigate('/ranking')}
+        onClick={() => handleNavigation('/ranking', true)}
       />
       <NavItem
         icon={<User className="w-5 h-5" />}
         label="Perfil"
         isActive={location.pathname === '/perfil'}
-        onClick={() => navigate('/perfil')}
+        onClick={() => handleNavigation('/perfil')}
       />
     </nav>
   );
