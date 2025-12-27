@@ -19,6 +19,7 @@ interface FixtureCardProps {
   homeScore: number | null;
   awayScore: number | null;
   round: string | null;
+  leagueName?: string | null;
   prediction?: Prediction | null;
   isAuthenticated?: boolean;
   onPredictClick?: () => void;
@@ -34,9 +35,9 @@ const FixtureCard = ({
   homeScore,
   awayScore,
   round,
+  leagueName,
   prediction,
   isAuthenticated = false,
-  
   onPredictClick,
 }: FixtureCardProps) => {
   const navigate = useNavigate();
@@ -56,10 +57,18 @@ const FixtureCard = ({
 
   return (
     <div className="bg-card border border-border/50 rounded-xl p-4">
-      {/* Round */}
-      {round && (
+      {/* League & Round */}
+      {(leagueName || round) && (
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs text-muted-foreground truncate">{round}</span>
+          {leagueName && (
+            <span className="text-xs font-semibold text-primary">{leagueName}</span>
+          )}
+          {leagueName && round && (
+            <span className="text-muted-foreground">•</span>
+          )}
+          {round && (
+            <span className="text-xs text-muted-foreground truncate">{round}</span>
+          )}
         </div>
       )}
 

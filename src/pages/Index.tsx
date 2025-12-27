@@ -19,6 +19,7 @@ interface Fixture {
   away_team_name: string;
   away_team_logo: string;
   league_id: number;
+  league_name: string | null;
   round: string | null;
   home_score: number | null;
   away_score: number | null;
@@ -190,6 +191,7 @@ const Index = () => {
                 homeScore={fixture.home_score}
                 awayScore={fixture.away_score}
                 round={fixture.round}
+                leagueName={fixture.league_name}
                 prediction={predictions.get(fixture.id)}
                 isAuthenticated={!!user}
                 onPredictClick={() => handlePredictClick(fixture)}

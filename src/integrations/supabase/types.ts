@@ -28,6 +28,7 @@ export type Database = {
           home_team_name: string
           id: number
           league_id: number
+          league_name: string | null
           processed: boolean | null
           round: string | null
           status_short: string
@@ -46,6 +47,7 @@ export type Database = {
           home_team_name: string
           id: number
           league_id: number
+          league_name?: string | null
           processed?: boolean | null
           round?: string | null
           status_short: string
@@ -64,6 +66,7 @@ export type Database = {
           home_team_name?: string
           id?: number
           league_id?: number
+          league_name?: string | null
           processed?: boolean | null
           round?: string | null
           status_short?: string

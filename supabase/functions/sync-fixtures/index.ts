@@ -22,6 +22,7 @@ interface ApiFixture {
   };
   league: {
     id: number;
+    name: string;
     round: string;
   };
   teams: {
@@ -99,6 +100,7 @@ serve(async (req) => {
       away_team_name: f.teams.away.name,
       away_team_logo: f.teams.away.logo,
       league_id: f.league.id,
+      league_name: f.league.name,
       round: f.league.round,
       home_score: f.goals.home,
       away_score: f.goals.away,
