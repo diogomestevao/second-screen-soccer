@@ -1,4 +1,4 @@
-import { Home, User, Radio } from 'lucide-react';
+import { Home, User, Radio, Trophy } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface NavItemProps {
@@ -41,6 +41,12 @@ const BottomNav = () => {
         label="Live"
         isActive={location.pathname === '/live'}
         onClick={() => navigate('/live')}
+      />
+      <NavItem
+        icon={<Trophy className="w-5 h-5" />}
+        label="Ranking"
+        isActive={location.pathname === '/ranking'}
+        onClick={() => navigate('/ranking')}
       />
       <NavItem
         icon={<User className="w-5 h-5" />}

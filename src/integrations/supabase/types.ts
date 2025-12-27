@@ -71,6 +71,36 @@ export type Database = {
         }
         Relationships: []
       }
+      leaderboard: {
+        Row: {
+          correct_winners: number
+          created_at: string | null
+          exact_scores: number
+          id: string
+          total_points: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          correct_winners?: number
+          created_at?: string | null
+          exact_scores?: number
+          id?: string
+          total_points?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          correct_winners?: number
+          created_at?: string | null
+          exact_scores?: number
+          id?: string
+          total_points?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       predictions: {
         Row: {
           away_score: number
@@ -152,6 +182,14 @@ export type Database = {
     }
     Functions: {
       can_place_prediction: { Args: { p_fixture_id: number }; Returns: boolean }
+      process_fixture_predictions: {
+        Args: {
+          p_away_score: number
+          p_fixture_id: number
+          p_home_score: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

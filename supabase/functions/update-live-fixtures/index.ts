@@ -121,6 +121,24 @@ serve(async (req) => {
             if (fixture.status_short === 'NS' && newStatus !== 'NS') {
               console.log(`[update-live-fixtures] ⚠️ Predictions BLOCKED for fixture ${fixture.id} (status changed from NS to ${newStatus})`);
             }
+
+            // Process predictions when match ends (FT = Full Time)
+            if (newStatus === 'FT' && homeScore !== null && awayScore !== null) {
+              console.log(`[update-live-fixtures] 🏆 Match ${fixture.id} ended! Processing predictions...`);
+              
+              const { error: processError } = await supabase
+                .rpc('process_fixture_predictions', {
+                  p_fixture_id: fixture.id,
+                  p_home_score: homeScore,
+                  p_away_score: awayScore
+                });
+
+              if (processError) {
+                console.error(`[update-live-fixtures] Error processing predictions for fixture ${fixture.id}:`, processError);
+              } else {
+                console.log(`[update-live-fixtures] ✅ Predictions processed successfully for fixture ${fixture.id}`);
+              }
+            }
           }
         }
       } catch (fixtureError) {
