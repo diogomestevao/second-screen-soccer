@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Calendar, Target, Pencil } from 'lucide-react';
+import { Calendar, Target, Pencil, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
+import { useNavigate } from 'react-router-dom';
 interface Prediction {
   home_score: number;
   away_score: number;
@@ -21,7 +21,6 @@ interface FixtureCardProps {
   round: string | null;
   prediction?: Prediction | null;
   isAuthenticated?: boolean;
-  
   onPredictClick?: () => void;
 }
 
@@ -40,6 +39,7 @@ const FixtureCard = ({
   
   onPredictClick,
 }: FixtureCardProps) => {
+  const navigate = useNavigate();
   const matchDate = new Date(dateTime);
   const formattedDate = format(matchDate, "dd MMM", { locale: ptBR });
   const formattedTime = format(matchDate, "HH:mm");
@@ -113,7 +113,7 @@ const FixtureCard = ({
         </div>
 
         {/* Prediction Section */}
-        {isAuthenticated && (
+        {isAuthenticated ? (
           <div className="flex items-center gap-2">
             {prediction ? (
               canPredict ? (
@@ -155,6 +155,16 @@ const FixtureCard = ({
               <span className="text-[10px] text-muted-foreground">Fechado</span>
             )}
           </div>
+        ) : (
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs px-3"
+            onClick={() => navigate('/perfil')}
+          >
+            Ver Mais
+            <ChevronRight className="w-3 h-3 ml-1" />
+          </Button>
         )}
       </div>
     </div>
