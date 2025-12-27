@@ -8,13 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { User, Mail, Phone, Camera, Lock, ArrowLeft, Loader2, LogOut } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type AuthMode = 'login' | 'signup' | 'forgot';
 
 export default function Profile() {
   const { user, profile, loading, signIn, signUp, signOut, resetPassword } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<AuthMode>('login');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -94,6 +95,7 @@ export default function Profile() {
         title: 'Bem-vindo!',
         description: 'Login realizado com sucesso',
       });
+      navigate('/');
     }
 
     setIsSubmitting(false);
